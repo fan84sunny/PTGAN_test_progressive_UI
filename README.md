@@ -58,7 +58,11 @@ We use cuda 11.0/python 3.7/torch 1.6.0/torchvision 0.7.0 for training and testi
 
 Install dependencies: `pip install requirements.txt`
 
-1. 執行 PTGAN_test_for_CCK.py (會有8個模型需要測試，但僅先測 transreid 就可以)
+目前使用的 query, gallery 圖片檔皆從 veri_pose 資料夾中取得
+
+我們寫的dataset只會載入一張 query 圖片進行 ReID
+
+1. 執行 UI_windows.py (會有8個模型需要測試，但僅先測 transreid 就可以)
 
 ```bash
 python UI_windows.py --config_file
@@ -71,26 +75,24 @@ OUTPUT_DIR
 './logs/stage2/transreid_256/v1/veri_for_test'
 ```
 
+2. Select query image, enter the rank-k number, then push the "set and run" button. 
+Waiting for the load bar. 
+The results will show in the left side of window.
+
 Detailed code
 process_for_test_CCK.py
-line: 217
 ```bash
 # this place will return progressive distance matrix and gallery img name
 distmats = compute_distmat(feat, query_data, gen_gallery, ori_gallery, evaluator, cfg, gen_P, gen_neg_vec, P, neg_vec)
 ```
 
-2. 執行之後會出現 sililiar_img_distmat.csv ，裡面存了圖片路徑和相對應圖片的距離 (值越大越不像，越小越像)
+3. after executing 執行之後會出現 sililiar_img_distmat.csv ，裡面存了圖片路徑和相對應圖片的距離 (值越大越不像，越小越像)
 
 column: query image path
 
 row: gallery image path
 
-目前使用的圖片檔皆從 veri_pose 資料夾中取得
-我們寫的dataset只會載入一張 query 圖片進行 ReID
 
-```bash=64
-query_data = get_one_img('../AIC21/veri_pose/query/filename.jpg', transform=transform)
-```
 
 
 ## GitHub Introduction (可以不用看)
