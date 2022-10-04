@@ -4,6 +4,7 @@ from copy import deepcopy
 
 
 def compute_P2(qf, gf, gc, la=3.0):
+    device = "cuda"
     X = gf
     neg_vec = {}
     u_cams = np.unique(gc)
@@ -11,7 +12,9 @@ def compute_P2(qf, gf, gc, la=3.0):
     for cam in u_cams:
         curX = gf[gc == cam]
         neg_vec[cam] = torch.mean(curX, axis=0)
-        tmp_eye = torch.eye(X.shape[1]).cuda()
+        # tmp_eye = torch.eye(X.shape[1]).cuda()
+        tmp_eye = torch.eye(X.shape[1]).to(device)
+        # tmp_eye = torch.eye(X.shape[1])
         P[cam] = torch.inverse(curX.T.matmul(curX)+curX.shape[0]*la*tmp_eye)
     return P, neg_vec
 

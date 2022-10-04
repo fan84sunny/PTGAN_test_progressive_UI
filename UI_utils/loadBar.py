@@ -23,7 +23,7 @@ from config import cfg
 #     from PySide2.QtCore import QTimer
 #     from PySide2.QtWidgets import QWidget, QApplication, QVBoxLayout, QProgressBar
 from gan.model import Model
-from process_for_test_CCK import do_inference
+from process_for_test_CCK import do_inference, get_pose, do_inference_reid
 from utils.logger import setup_logger
 
 StyleSheet = """
@@ -141,9 +141,12 @@ class Runthread(QThread):
                 logger.info(config_str)
         logger.info("Running with config:\n{}".format(cfg))
         query_data = self.mainWin.get_one_img(self.mainWin.query_path)
-        model = Model()
-        model.reset_model_status()
-        do_inference(cfg, model, query_data, self.mainWin)
+        # model = Model("cuda")
+        # model.reset_model_status()
+        # model.eval()
+        query_poseid = get_pose(query_data)
+        query_feats = do_inference_reid(cfg, query_data)
+        do_inference(cfg, query_data, query_feats=query_feats, query_poseid=query_poseid, resultWindow=self.mainWin)
         self.mainWin.ProgressBar.add_value(100)
 
 

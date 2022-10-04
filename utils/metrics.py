@@ -107,10 +107,7 @@ class R1_mAP_eval():
 
     def update(self, output):  # called once for each batch
         feat, pid, camid, trackid = output
-        if type(feat) == list:
-            self.feats = feat
-        else:
-            self.feats.append(feat)
+        self.feats = feat
         self.pids.extend(np.asarray(pid))
         self.camids.extend(np.asarray(camid))
         self.tids.extend(np.asarray(trackid))
@@ -149,14 +146,13 @@ class R1_mAP_eval():
         return dist, origin_track_dist
 
     def compute(self, fic=False, fac=False, crop_test=False, rm_camera=False, la=0.18, save_dir='./', P=None, neg_vec=None):
-        feats = torch.cat(self.feats, dim=0)
         if crop_test:
             # feats = feats[::2] + feats[1::2]
             # self.pids = self.pids[::2]
             # self.camids = self.camids[::2]
             # self.tids = self.tids[::2]
             # self.num_query = int(self.num_query/2)
-            feats *= 2
+            feats = self.feats*2
         if self.feat_norm:
             # print("The test feature is normalized")
             feats = torch.nn.functional.normalize(feats, dim=1, p=2)  # along channel

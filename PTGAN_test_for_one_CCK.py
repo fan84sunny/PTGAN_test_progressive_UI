@@ -1,4 +1,5 @@
 import warnings
+
 warnings.filterwarnings("ignore")
 import os
 import torch
@@ -7,14 +8,14 @@ from PIL import Image
 from utils import transforms
 from config import cfg
 from utils.logger import setup_logger
-from process_for_test_CCK import do_inference
-from gan.model import Model
+from process_for_test_CCK import do_inference, get_pose, do_inference_reid
+
+# from gan.model import Model
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 
 
 def get_one_img(query_img_path, transform):
-
     img = Image.open(query_img_path).convert("RGB")
     img = transform(img)
     pid = int(query_img_path[-24:-20])
@@ -64,9 +65,13 @@ def main():
                                     normalizer])
 
     query_data = get_one_img('../AIC21/veri_pose/query/0002_c002_00030600_0.jpg', transform=transform)
-    model = Model()
-    model.reset_model_status()
-    do_inference(cfg, model, query_data, None)
+    query_poseid = get_pose(query_data)
+    query_feats = do_inference_reid(cfg, query_data)
+    do_inference(cfg, query_data, query_feats=query_feats, query_poseid=query_poseid, resultWindow=None)
+
+    # model = Model()
+    # model.reset_model_status()
+    # do_inference(cfg, model, query_data, None)
 
 
 if __name__ == '__main__':

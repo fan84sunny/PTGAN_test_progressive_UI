@@ -125,6 +125,7 @@ class interface(QWidget):
         self.label_q.setPixmap(QPixmap.fromImage(qtImage))
 
     def set_topK_run(self):
+        self.topK_button.setEnabled(False)
         self.k = int(self.edit_topk.text())
         self.ProgressBar = loadBar.ProgressBar(self, minimum=0, maximum=100, textVisible=False,
                                                objectName="BlueProgressBar")
