@@ -76,7 +76,7 @@ class GaussianSmoothing(nn.Module):
         Returns:
             filtered (torch.Tensor): Filtered output.
         """
-        maps = torch.zeros(len(landmark), 20, 224, 224).to("cuda")
+        maps = torch.zeros(len(landmark), 20, 224, 224)
         value = torch.min(landmark, dim=2).values
         flag = value != -1
         index = landmark[flag].cpu().detach().numpy().astype(np.int)
@@ -101,12 +101,12 @@ class GaussianSmoothing(nn.Module):
 
 class Model(nn.Module):
 
-    def __init__(self):
+    def __init__(self, device):
         super(Model, self).__init__()
         # self.opt = opt
         # self.save_dir = os.path.join(opt.checkpoints, opt.name)
         self.norm_layer = get_norm_layer(norm_type="batch")
-        self.device = "cuda"
+        self.device = device
 
         self._init_models()
         print('---------- Networks initialized -------------')
@@ -133,10 +133,14 @@ class Model(nn.Module):
         self._load_state_dict(self.net_Dp,
                               '/home/ANYCOLOR2434/AICITY2021_Track2_DMT/AICITY2021_Track2_DMT-main/code_sw/weights/GAN_stage_2/17_net_Dp.pth')
 
-        self.net_E = nn.DataParallel(self.net_E).to(self.device)
-        self.net_G = nn.DataParallel(self.net_G).to(self.device)
-        self.net_Di = nn.DataParallel(self.net_Di).to(self.device)
-        self.net_Dp = nn.DataParallel(self.net_Dp).to(self.device)
+        # self.net_E = nn.DataParallel(self.net_E).to(self.device)
+        # self.net_G = nn.DataParallel(self.net_G).to(self.device)
+        # self.net_Di = nn.DataParallel(self.net_Di).to(self.device)
+        # self.net_Dp = nn.DataParallel(self.net_Dp).to(self.device)
+        self.net_E = self.net_E.to(self.device)
+        self.net_G = self.net_G.to(self.device)
+        self.net_Di = self.net_Di.to(self.device)
+        self.net_Dp = self.net_Dp.to(self.device)
 
     def reset_model_status(self):
         self.net_G.eval()
@@ -149,7 +153,7 @@ class Model(nn.Module):
         net.load_state_dict(state_dict)
 
     def enocder(self, img):
-        noise = torch.randn(img.shape[0], 128)
+        noise = torch.randn(img.shape[0], 128).to(self.device)
         # noise = noise.to('cuda')
         outputs = self.net_E(img)
         id_feature = outputs[1].view(outputs[0].size(0), outputs[0].size(1), 1, 1)

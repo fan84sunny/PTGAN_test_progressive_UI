@@ -169,9 +169,6 @@ class CustomPoseGenerator(nn.Module):
         pose_feature = self.en_avg(pose_feature_5)
 
         if self.fuse_mode == 'cat':
-            # print(reid_feature.shape)
-            # print(pose_feature.shape)
-            # print(noise.shape)
             feature = torch.cat((reid_feature, pose_feature, noise), dim=1)
         elif self.fuse_mode == 'add':
             feature = self.W_reid(reid_feature.view(batch_size, -1)) + \

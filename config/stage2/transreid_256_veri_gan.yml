@@ -1,6 +1,6 @@
 MODEL:
   PRETRAIN_CHOICE: 'self'
-  PRETRAIN_PATH: './reid_model/checkpoints/stage1/transreid_256/transformer_40.pth'
+  PRETRAIN_PATH: '../PTGAN_model/checkpoints/stage1/transreid_256/transformer_40.pth'
   METRIC_LOSS_TYPE: 'triplet'
   IF_LABELSMOOTH: 'off'
   IF_WITH_CENTER: 'no'
@@ -49,7 +49,7 @@ TEST:
   IMS_PER_BATCH: 128
   RE_RANKING: True
   RE_RANKING_TRACK: True
-  WEIGHT: './logs/stage2/transreid_256/v1/transformer_2.pth'
+  WEIGHT: '../PTGAN_model/logs/stage2/transreid_256/v1/transformer_2.pth'
   NECK_FEAT: 'after'
   FEAT_NORM: 'yes'
   FLIP_FEATS: 'no'
@@ -62,4 +62,4 @@ STAGE2:
   EPS: 0.55
   LA: 0.0005
       
-OUTPUT_DIR: './logs/stage2/transreid_256/veri'
+OUTPUT_DIR: '../PTGAN_model/logs/stage2/transreid_256/veri'

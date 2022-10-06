@@ -220,18 +220,18 @@ def do_inference(cfg, query_data, query_feats, query_poseid, resultWindow=None):
                             dataset=cfg.DATASETS.NAMES, reranking_track=cfg.TEST.RE_RANKING_TRACK)
     evaluator.reset()
 
-    gallery_path = f'gallery_features/{query_poseid.item()}'
+    gallery_path = f'../PTGAN_model/gallery_features/{query_poseid.item()}'
     with open(os.path.join(gallery_path, 'gen_gallery_feature'), 'rb') as f:
         gen_gallery = pickle.load(f)
     with open(os.path.join(gallery_path, 'gen_gallery_P'), 'rb') as f:
         gen_P = pickle.load(f)
     with open(os.path.join(gallery_path, 'gen_gallery_vec'), 'rb') as f:
         gen_neg_vec = pickle.load(f)
-    with open('gallery_features/orig_gallery_feature_test', 'rb') as f:
+    with open('../PTGAN_model/gallery_features/orig_gallery_feature_test', 'rb') as f:
         ori_gallery = pickle.load(f)
-    with open("gallery_features/orig_gallery_P_test", 'rb') as f:
+    with open("../PTGAN_model/gallery_features/orig_gallery_P_test", 'rb') as f:
         P = pickle.load(f)
-    with open("gallery_features/orig_gallery_vec_test", 'rb') as f:
+    with open("../PTGAN_model/gallery_features/orig_gallery_vec_test", 'rb') as f:
         neg_vec = pickle.load(f)
 
     start = time.time()
